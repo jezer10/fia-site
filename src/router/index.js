@@ -9,10 +9,15 @@ import Eventos from "@/views/Dashboard/Eventos.vue";
 import Publicaciones from "@/views/Dashboard/Publicaciones.vue";
 import Asistencias from "@/views/Dashboard/Asistencias.vue";
 import Configuracion from "@/views/Dashboard/Configuracion.vue";
+import Home from "@/layouts/Home/Index.vue";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
+    {
+      path:"/home",
+      component: Home,
+    },
     {
       path: "/",
       component: Dashboard,

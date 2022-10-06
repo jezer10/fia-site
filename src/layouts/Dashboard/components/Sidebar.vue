@@ -1,9 +1,9 @@
 <template>
   <div
-    class="sidebar h-screen p-6 w-60 fixed inset-y-0 transition-all"
-    :class="[isMenuOpen ? 'left-0' : '-left-60']"
+    class="sidebar h-screen p-6 w-80 fixed inset-y-0 transition-all"
+    :class="[isMenuOpen ? 'left-0' : '-left-80']"
   >
-    <div class="h-full bg-primary rounded-lg shadow text-white relative">
+    <div class="h-full bg-primary rounded-2xl shadow text-white relative">
       <div class="flex flex-col items-center justify-center py-8 gap-2">
         <img
           src="@/assets/images/profile.jpg"
@@ -47,7 +47,7 @@
           </li>
         </ul>
       </div>
-      <div class="absolute bottom-2 text-[8px] text-center inset-x-0 font-thin">
+      <div class="absolute bottom-4 text-[8px] text-center inset-x-0 font-thin">
         Design by G2 Crew - v1.0
       </div>
       
@@ -75,7 +75,7 @@ export default {
   components: { UserIcon, ArrowLeftOnRectangleIcon },
   methods: {
     logout() {
-      console.log("Logging Out");
+      this.$router.push("/login")
     },
   },
 };
