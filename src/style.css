@@ -33,6 +33,18 @@
   @font-face {
     font-family: "Inter";
     font-style: normal;
+    font-weight: 500;
+    src: url("@/assets/fonts/Inter-variable.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
+    font-weight: 600;
+    src: url("@/assets/fonts/Inter-variable.ttf") format("truetype");
+  }
+  @font-face {
+    font-family: "Inter";
+    font-style: normal;
     font-weight: 700;
     src: url("@/assets/fonts/Inter-variable.ttf") format("truetype");
   }
@@ -41,5 +53,8 @@
 @layer components {
   .form-control {
     @apply bg-gray-400 rounded-lg w-full placeholder:text-gray-50 focus:outline-none focus:bg-gray-500 text-white px-4 placeholder:text-sm py-2;
+  }
+  .form-label {
+    @apply font-bold text-xs text-gray-700;
   }
 }

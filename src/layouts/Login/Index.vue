@@ -9,13 +9,15 @@ export default {
     <img
       src="@/assets/images/logo1.png"
       class="fixed right-32 -z-10 h-screen"
-      alt=""
     />
     <header v-if="true" class="bg-blue-500 absolute top-0 inset-x-0">
       <nav class="h-20 bg-primary px-4 flex items-center justify-between">
         <img src="@/assets/icons/logo-upeu1.png" class="h-10" alt="logo upeu" />
-        <a href="" class="rounded bg-secondary px-4 py-2 shdaow text-white">
-          Ir al Inicio</a
+        <router-link
+          to="/home"
+          class="rounded bg-secondary px-4 py-2 shdaow text-white"
+        >
+          Ir al Inicio</router-link
         >
       </nav>
       <div class="h-2 bg-secondary"></div>
@@ -29,7 +31,7 @@ export default {
           />
           <img
             src="@/assets/images/stock-photo.jpg"
-            class="w-96 h-96 2xl:w-[518px]  2xl:h-[518px] fixed -left-48 -bottom-8 2xl:bottom-32 2xl:-left-48 -z-10 border-white border-[16px] rounded-full object-cover"
+            class="w-96 h-96 2xl:w-[518px] 2xl:h-[518px] fixed -left-48 -bottom-8 2xl:bottom-32 2xl:-left-48 -z-10 border-white border-[16px] rounded-full object-cover"
           />
           <img
             src="@/assets/images/stock-photo.jpg"
@@ -48,6 +50,23 @@ export default {
                   continuar...</span
                 >
               </p>
+              <button
+                class="w-full py-2 shadow rounded-lg hover:shadow-lg bg-white flex items-center justify-center px-4 relative"
+              >
+                <img
+                  src="@/assets/icons/logo-google.png"
+                  class="w-4 h-4 absolute left-2"
+                />
+                <span class="text-sm font-medium"
+                  >Iniciar Sesión con Google</span
+                >
+              </button>
+              <div class="flex items-center justify-center relative py-2">
+                <span class="text-xs absolute bg-white px-1"
+                  >O inicia con usuario y contraseña</span
+                >
+                <hr class="w-full" />
+              </div>
               <div class="relative flex items-center">
                 <input type="text" class="form-control" placeholder="Usuario" />
                 <UserIcon class="w-4 h-4 absolute right-4 text-white" />
