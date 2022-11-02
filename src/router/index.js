@@ -9,14 +9,27 @@ import Eventos from "@/views/Dashboard/Eventos.vue";
 import Publicaciones from "@/views/Dashboard/Publicaciones.vue";
 import Asistencias from "@/views/Dashboard/Asistencias.vue";
 import Configuracion from "@/views/Dashboard/Configuracion.vue";
+//Home Views
 import Home from "@/layouts/Home/Index.vue";
+import Landing from "@/views/Home/Landing.vue";
+import VinculacionMedio from "@/views/Home/VinculacionMedio.vue";
 
 const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
-      path:"/home",
+      path: "/home",
       component: Home,
+      children: [
+        {
+          path: "",
+          component: Landing,
+        },
+        {
+          path: "/vendiciones",
+          component: VinculacionMedio,
+        },
+      ],
     },
     {
       path: "/",

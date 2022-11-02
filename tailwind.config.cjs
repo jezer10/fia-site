@@ -8,6 +8,10 @@ module.exports = {
       spacing: {
         22: "5.5rem",
         82: "20.5rem",
+        92: "23rem",
+        88: "22rem",
+        84: "21rem",
+        76: "19rem",
       },
       fontFamily: {
         inter: ["'Inter'", ...defaultTheme.fontFamily.sans],

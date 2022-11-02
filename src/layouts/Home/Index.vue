@@ -1,80 +1,76 @@
+<script>
+import { ChevronLeftIcon, ChevronRightIcon } from "@heroicons/vue/24/solid";
+export default {
+  components: {
+    ChevronLeftIcon,
+    ChevronRightIcon,
+  },
+  data: () => ({
+    routes: [
+      {
+        name: "Gestión",
+        path: "/home",
+      },
+      {
+        name: "Formación Integral",
+        path: "/home",
+      },
+      {
+        name: "I + D + I",
+        path: "/home",
+      },
+      {
+        name: "Vinculación con el Medio",
+        path: "/home",
+      },
+      {
+        name: "Desarrollo Espiritual",
+        path: "/home",
+      },
+    ],
+  }),
+};
+</script>
 <template>
-  <div class="flex flex-col overflow-y-auto bg-gray-100">
-    <div class="h-screen relative">
-      <div class="pb-24 h-full">
-        <div class="relative h-full">
-          <img
-            src="@/assets/images/image2.jpg"
-            class="h-full w-full object-cover"
-          />
+  <div class="bg-white backdrop-blur-sm fixed h-20 top-0 inset-x-0 z-10">
+    <div class="relative h-full">
+      <div class="absolute h-full w-80">
+        <div class="relative flex items-center h-full">
           <div
-            class="absolute bottom-0 py-2 items-center justify-center flex inset-x-0 gap-2"
-          >
-            <div
-              class="w-6 h-1 rounded"
-              v-for="i in 5"
-              :class="i == 2 ? 'bg-secondary' : 'bg-black/50'"
-            ></div>
-          </div>
-        </div>
-      </div>
-      <div class="absolute inset-x-0 bottom-0 z-10">
-        <div class="bg-secondary h-2"></div>
-        <div
-          class="bg-primary h-22 flex items-center px-8 justify-between relative"
-        >
-        <img src="@/assets/images/circuito.png" class="h-full  absolute right-0" alt="">
-
+            class="w-80 bg-secondary h-full rounded-tr-full absolute left-0"
+          ></div>
+          <div
+            class="w-76 bg-white h-full rounded-tr-full absolute left-0"
+          ></div>
+          <div
+            class="w-72 bg-secondary h-full rounded-tr-full absolute left-0"
+          ></div>
           <img
-            src="@/assets/images/circuito.png"
-            class="h-full rotate-180 absolute left-0"
-            alt=""
+            src="@/assets/images/circuito3.svg"
+            class="h-full absolute left-0"
           />
-          <p class="text-white flex flex-col">
-            <span class="font-thin text-sm">Escuela profesional de</span>
-            <span class="font-bold text-xl">Ingeniería de Sistemas</span>
-          </p>
-          <img src="@/assets/icons/logo-upeu1.png" class="h-10" />
+          <img
+            src="@/assets/icons/logo-upeu1.png"
+            class="h-10 absolute left-24"
+          />
+        </div>
+      </div>
+      <div class="flex items-center h-full absolute right-4 gap-4">
+        <router-link v-for="r in routes" :to="{ path: r.path }" class="group">
+          <span class="text-xs text-primary font-bold">{{ r.name }}</span>
+          <div
+            class="h-1 bg-secondary rounded-full w-0 group-hover:w-1/2 transition-all duration-1000"
+          ></div>
+        </router-link>
+        <div
+          class="text-white bg-primary rounded-lg px-4 py-1 text-xs font-medium"
+        >
+          Ciclo
         </div>
       </div>
     </div>
-
-    <div class="h-screen p-4">
-      <div class="w-full h-full grid grid-cols-2 gap-4">
-        <div class="bg-white rounded shadow relative">
-          <div class="h-16 flex items-center px-4 absolute inset-x-0">
-            <span class="font-bold text-lg">Eventos</span>
-          </div>
-          <div class="h-full pt-16">
-            <div class="bg-primary text-white p-4 relative flex items-center">
-              <div class="flex flex-col">
-                <span class="font-bold text-lg"> Cultura </span>
-                <span class="text-sm font-light">4:15 PM - 6:45 PM</span>
-              </div>
-              <div
-                class="p-4 h-full bg-indigo-600 absolute right-0 flex flex-col items-center"
-              >
-                <span class="font-bold text-lg">09</span>
-                <span class="">OCT.</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="grid grid-rows-4 gap-4">
-          <div class="bg-white rounded shadow">
-            <div class="font-bold p-2">Culturas</div>
-          </div>
-          <div class="bg-white rounded shadow">
-            <div class="font-bold p-2">Activate</div>
-          </div>
-          <div class="bg-white rounded shadow"></div>
-          <div class="bg-white rounded shadow"></div>
-        </div>
-      </div>
-    </div>
-    <div class="h-screen"></div>
-    <div class="px-4 pb-4">
-      <span class="text-xs text-gray-400">2022 UPEU</span>
-    </div>
+  </div>
+  <div>
+    <router-view></router-view>
   </div>
 </template>
