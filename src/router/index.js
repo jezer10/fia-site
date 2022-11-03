@@ -13,6 +13,7 @@ import Configuracion from "@/views/Dashboard/Configuracion.vue";
 import Home from "@/layouts/Home/Index.vue";
 import Landing from "@/views/Home/Landing.vue";
 import VinculacionMedio from "@/views/Home/VinculacionMedio.vue";
+import Activate from "@/views/Home/Activate.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -28,6 +29,10 @@ const router = createRouter({
         {
           path: "vendiciones",
           component: VinculacionMedio,
+        },
+        {
+          path: "activate",
+          component: Activate,
         },
       ],
     },

@@ -9,33 +9,18 @@
           class="w-full h-full rounded-lg object-cover object-center"
         />
         <div class="w-full h-full absolute bg-blue-900/70 rounded-lg"></div>
-        <span class="absolute"> Vinculación con el Medio </span>
+        <span class="absolute"> Activate Sistemas</span>
       </div>
       <div class="h-full rounded-lg grid grid-cols-3 gap-8 text-gray-700">
         <div class="rounded-lg bg-gray-200 shadow p-4 flex flex-col gap-4">
           <div class="flex flex-col">
-            <span class="font-bold text-2xl">Dirección</span>
-            <span class="font-light text-xs">Responsable</span>
+            <span class="font-bold text-2xl">Próximos Eventos</span>
           </div>
-          <div class="flex items-center justify-center">
+          <div class="flex  h-full  items-center justify-center">
             <img
-            src="@/assets/images/profile.jpg"
-            class="w-28 h-28 rounded-lg object-cover object-center"
-          />
-          </div>
-          <div class="text-xs flex flex-col">
-            <span class="font-bold text-lg">Mg. Diana Sanchez Torpoco</span>
-            <span
-              ><span class="font-bold">Area: </span> Coord. Vinculación con el
-              medio EP</span
-            >
-            <span
-              ><span class="font-bold">Celular: </span> +51 976 387 055</span
-            >
-            <span
-              ><span class="font-bold">Correo: </span>
-              jezerrazuri@upeu.edu.pe</span
-            >
+              src="@/assets/images/profile.jpg"
+              class="w-full h-full rounded-lg object-cover object-center"
+            />
           </div>
         </div>
         <div class="rounded-lg bg-gray-200 shadow p-4 flex flex-col gap-8">
@@ -104,7 +89,7 @@
             <button
               class="text-gray-500 w-6 h-6 rounded-full absolute top-4 right-4"
             >
-              <InformationCircleIcon class="w-full h-full"/>
+              <InformationCircleIcon class="w-full h-full" />
             </button>
             <div class="flex flex-col">
               <span class="font-bold text-2xl">Mis Horas</span>
