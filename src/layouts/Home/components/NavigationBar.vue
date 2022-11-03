@@ -100,7 +100,7 @@ export default {
                       v-for="item in r.subAxes"
                       :key="item.name"
                       :to="item.path"
-                      class="flex items-center rounded-lg text-white hover hover:text-secondary focus:outline-none capitalize"
+                      class="flex items-center rounded-lg text-white hover hover:text-secondary focus:outline-none capitalize text-xs"
                     >
                       {{ item.name }}
                     </router-link>

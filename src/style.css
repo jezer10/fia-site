@@ -48,7 +48,18 @@
     font-weight: 700;
     src: url("@/assets/fonts/Inter-variable.ttf") format("truetype");
   }
+
+  table {
+    @apply w-full
+  }
+  table > thead > tr > th {
+    @apply text-left text-xs
+  }
+  table > tbody > tr > td {
+    @apply text-left text-xs
+  }
 }
+
 
 @layer components {
   .form-control {

@@ -27,7 +27,7 @@ const router = createRouter({
           component: Landing,
         },
         {
-          path: "vendiciones",
+          path: "vinculacion-medio",
           component: VinculacionMedio,
         },
         {

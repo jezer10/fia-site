@@ -16,7 +16,7 @@
           <div class="flex flex-col">
             <span class="font-bold text-2xl">Próximos Eventos</span>
           </div>
-          <div class="flex  h-full  items-center justify-center">
+          <div class="flex h-full items-center justify-center">
             <img
               src="@/assets/images/profile.jpg"
               class="w-full h-full rounded-lg object-cover object-center"
@@ -25,7 +25,7 @@
         </div>
         <div class="rounded-lg bg-gray-200 shadow p-4 flex flex-col gap-8">
           <div class="flex flex-col">
-            <span class="font-bold text-2xl">Próxima Proyección</span>
+            <span class="font-bold text-2xl">Próximo Activate</span>
           </div>
           <div class="flex flex-col gap-8 px-8">
             <div class="grid grid-cols-4 gap-4">
@@ -58,14 +58,12 @@
             </div>
             <div class="text-xs flex flex-col">
               <span
-                ><span class="font-bold">Area: </span> Coord. Vinculación con el
-                medio EP</span
+                ><span class="font-bold">Fecha: </span> Coord. Vinculación con
+                el medio EP</span
               >
+              <span><span class="font-bold">Hora: </span> +51 976 387 055</span>
               <span
-                ><span class="font-bold">Celular: </span> +51 976 387 055</span
-              >
-              <span
-                ><span class="font-bold">Correo: </span>
+                ><span class="font-bold">Lugar: </span>
                 jezerrazuri@upeu.edu.pe</span
               >
             </div>
@@ -73,7 +71,7 @@
               <button
                 class="bg-secondary py-2 w-full rounded-lg text-white font-bold"
               >
-                Participar
+                Registrar Asistencia
               </button>
               <button
                 class="bg-gray-300 py-2 w-full rounded-lg text-white font-bold"
@@ -84,16 +82,28 @@
           </div>
         </div>
         <div class="grid grid-rows-2 h-full gap-8">
-          <div class="rounded-lg bg-gray-200 shadow"></div>
-          <div class="rounded-lg bg-gray-200 shadow p-4 relative">
+          <div class="rounded-lg bg-gray-200 shadow p-4">
+            <div class="flex flex-col">
+              <span class="font-bold text-2xl">Retos</span>
+              <span class="font-light text-xs"
+                >Retos de la semana</span
+              >
+            </div>
+            <button class="focus:outline-none text-secondary font-bold">Sin Retos</button>
+          </div>
+          <div
+            class="rounded-lg bg-gray-200 shadow p-2 relative flex flex-col gap-2"
+          >
             <button
               class="text-gray-500 w-6 h-6 rounded-full absolute top-4 right-4"
             >
               <InformationCircleIcon class="w-full h-full" />
             </button>
             <div class="flex flex-col">
-              <span class="font-bold text-2xl">Mis Horas</span>
-              <span class="font-light text-xs">Consulta tus horas</span>
+              <span class="font-bold text-2xl">Asistencias</span>
+              <span class="font-light text-xs"
+                >Consulta tus asistencias y faltas</span
+              >
             </div>
             <div>
               <input
@@ -102,11 +112,15 @@
                 class="w-full py-2 px-4 rounded-lg shadow focus:outline-none"
               />
             </div>
-            <div>
-              <span class="flex items-center gap-1">
-                <span class="text-sm font-medium">Total de Horas: </span>
-                <span class="font-bold text-2xl"> 0</span>
-              </span>
+            <div class="grid grid-cols-2 text-lg">
+              <div class="flex flex-col text-center">
+                <span class="font-medium"> Asistencias </span>
+                <span class="font-bold"> 69 </span>
+              </div>
+              <div class="flex flex-col text-center text-red-600">
+                <span class="font-medium"> Faltas </span>
+                <span class="font-bold"> 96 </span>
+              </div>
             </div>
           </div>
         </div>
