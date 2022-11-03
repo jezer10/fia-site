@@ -70,7 +70,7 @@ export default {
       </div>
     </div>
   </div>
-  <div>
+  <div class="">
     <router-view></router-view>
   </div>
 </template>

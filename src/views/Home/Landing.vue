@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-col overflow-y-auto bg-gray-100">
     <div class="h-screen relative">
-      <div class="h-full pt-16">
+      <div class="h-full pt-20">
         <div class="relative h-full flex items-center bg-primary">
           <transition-group
             class="w-full h-full flex"
