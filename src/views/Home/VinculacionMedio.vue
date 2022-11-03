@@ -72,3 +72,19 @@
     </div>
   </div>
 </template>
+
+<script>
+import moment from "moment";
+export default {
+  data: () => ({}),
+  mounted() {
+    const date1 = moment().add(7, "days");
+    const date2 = moment()
+    console.log(date1.diff(date2,'days'))
+    console.log(date1.diff(date2,'hours'))
+    console.log(date1.diff(date2,'minutes'))
+    console.log(date1.diff(date2,'seconds'))
+
+  },
+};
+</script>
