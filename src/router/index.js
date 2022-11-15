@@ -14,6 +14,7 @@ import Home from "@/layouts/Home/Index.vue";
 import Landing from "@/views/Home/Landing.vue";
 import VinculacionMedio from "@/views/Home/VinculacionMedio.vue";
 import Activate from "@/views/Home/Activate.vue";
+import Practicas from "@/views/Home/Practicas.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -33,6 +34,10 @@ const router = createRouter({
         {
           path: "activate",
           component: Activate,
+        },
+        {
+          path: "practicas",
+          component: Practicas,
         },
       ],
     },

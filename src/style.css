@@ -49,6 +49,8 @@
     src: url("@/assets/fonts/Inter-variable.ttf") format("truetype");
   }
 
+  
+
   table {
     @apply w-full
   }
@@ -59,7 +61,10 @@
     @apply text-left text-xs
   }
 }
-
+@font-face {
+  font-family: "Vidaloka";
+  src: url("@/assets/fonts/Vidaloka-Regultar.ttf") format("truetype");
+}
 
 @layer components {
   .form-control {

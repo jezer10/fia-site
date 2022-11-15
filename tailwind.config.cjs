@@ -17,11 +17,18 @@ module.exports = {
       },
       fontFamily: {
         inter: ["'Inter'", ...defaultTheme.fontFamily.sans],
+        vidaloka: ["'Vidaloka'", "vidaloka"]
       },
       colors: {
         primary: "#0F3971",
         secondary: "#E4752B",
         "primary-light": "#335B92",
+
+        "blue-gray": "#bac4d1",
+        "intense-blue":"#0e3e74",
+        "light-orange":"#e79b68",
+        "light-pink":"#eccbb4"
+
       },
     },
   },
