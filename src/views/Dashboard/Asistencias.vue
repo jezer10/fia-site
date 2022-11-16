@@ -13,27 +13,6 @@
     >
       APERTURAR ASISTENCIA
     </button>
-    <!-- <div class="flex justify-between items-center w-full">
-      <div class="flex gap-4">
-        <select class="form-control w-36" v-model="form.semestre">
-          <option value="">Semestre</option>
-          <option v-for="s in semestres" :value="s.id">
-            {{ s.name }}
-          </option>
-        </select>
-        <select class="form-control w-36" v-model="form.ciclo">
-          <option value="" hidden>Ciclo</option>
-          <option v-for="c in ciclos" :value="c.id">
-            {{ c.name }}
-          </option>
-        </select>
-      </div>
-      <button
-        class="bg-secondary text-white rounded-lg px-4 py-2 shadow whitespace-nowrap"
-      >
-        Nuevo Registro
-      </button>
-    </div> -->
 
     <div class="w-full overflow-x-auto" v-if="this.activate">
       <div class="flex gap-4">
@@ -43,7 +22,7 @@
           @change="semesterChange($event.target.value)"
         >
           <option value="" hidden>Semestre</option>
-          <option v-for="d in semestres" :value="d.id" >
+          <option v-for="d in semestres" :value="d.id">
             {{ d.semester }}
           </option>
         </select>
@@ -134,7 +113,6 @@
         </div>
 
         <div>
-          <!-- <label><input type="checkbox" v-model="studentForm.asistencia" @change="aer($event)"> ASISTIÓ </label> -->
           <label class="switch">
             <input
               type="checkbox"
@@ -143,8 +121,6 @@
             />
             <span class="slider round"></span>
           </label>
-          <!-- <input type="text" v-model="studentForm.fecha"
-            class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full" /> -->
         </div>
 
         <div>
@@ -157,10 +133,34 @@
         </div>
       </div>
     </div>
-
+    <div class="flex justify-between">
+      <div class="flex gap-4">
+        <div class="relative flex items-center">
+          <input
+            type="text"
+            class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 pr-10 text-sm"
+            placeholder="Buscar "
+          />
+          <MagnifyingGlassIcon class="w-4 h-4 text-gray-600 absolute right-4" />
+        </div>
+        <select
+          type="text"
+          class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 text-sm"
+        >
+          <option value="">Semestre</option>
+        </select>
+        <select
+          type="text"
+          class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 text-sm"
+        >
+          <option value="" class="bg-blue-50">Ciclo</option>
+        </select>
+      </div>
+      <button class="flex gap-2 rounded-lg bg-secondary px-4 py-2 text-white items-center"><PlusIcon class="w-4 h-4" /><span>Registrar</span></button>
+    </div>
     <div class="w-full overflow-x-auto">
       <table>
-        <thead>
+        <thead class="border-dashed border-b-2">
           <tr>
             <th>Nombre</th>
             <th>Apellido</th>
@@ -188,7 +188,8 @@
 
 <script>
 import { client } from "@/api/client";
-import Prueba from "./Prueba.vue";
+
+import { MagnifyingGlassIcon, PlusIcon } from "@heroicons/vue/24/solid";
 export default {
   data: () => ({
     searchedSemester: false,
@@ -367,11 +368,21 @@ export default {
       });
     },
   },
-  components: { Prueba },
+  components: { MagnifyingGlassIcon, PlusIcon },
 };
 </script>
 
 <style>
+#border {
+  background-image: linear-gradient(
+    to right,
+    #d9d9d9 40%,
+    rgba(255, 255, 255, 0) 20%
+  );
+  background-position: bottom;
+  background-size: 5px 4px;
+  background-repeat: repeat-x;
+}
 .switch {
   position: relative;
   display: inline-block;
