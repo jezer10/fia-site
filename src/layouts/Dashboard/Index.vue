@@ -4,7 +4,7 @@ import Sidebar from "./components/Sidebar.vue";
 import { PencilIcon } from "@heroicons/vue/24/solid";
 export default {
   data: () => ({
-    isMenuOpen: true,
+    isMenuOpen: false,
   }),
   components: { Header, Sidebar, PencilIcon },
 };
@@ -12,20 +12,14 @@ export default {
 
 <template>
   <div class="w-screen h-screen">
-    <button
-      @click="isMenuOpen = !isMenuOpen"
-      class="fixed bottom-2 right-2 shadow rounded-full bg-secondary w-12 h-12 p-4 text-white"
-    >
-      <PencilIcon />
-    </button>
-    <Header />
+    <Header @openMenu="isMenuOpen = !isMenuOpen" />
     <Sidebar :isMenuOpen="isMenuOpen" />
     <div
       class="contenido w-full h-full pt-24 transition-all"
-      :class="isMenuOpen ? 'pl-82' : 'pl-6'"
+      :class="isMenuOpen ? 'md:pl-82' : ''"
     >
-      <div class="h-full w-full py-8 pr-6">
-       <router-view></router-view>
+      <div class="h-full w-full px-4 pt-4">
+        <router-view></router-view>
       </div>
     </div>
   </div>

@@ -17,6 +17,7 @@ module.exports = {
       },
       fontFamily: {
         inter: ["'Inter'", ...defaultTheme.fontFamily.sans],
+        roboto: ["'Roboto'", ...defaultTheme.fontFamily.sans],
         vidaloka: ["'Vidaloka'", "vidaloka"]
       },
       colors: {

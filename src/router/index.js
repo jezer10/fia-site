@@ -7,7 +7,7 @@ import Inicio from "@/views/Dashboard/Inicio.vue";
 import Usuarios from "@/views/Dashboard/Usuarios.vue";
 import Eventos from "@/views/Dashboard/Eventos.vue";
 import Publicaciones from "@/views/Dashboard/Publicaciones.vue";
-import Asistencias from "@/views/Dashboard/Asistencias.vue";
+import Asistencias from "@/views/Dashboard/Asistencias/Index.vue";
 import Configuracion from "@/views/Dashboard/Configuracion.vue";
 //Home Views
 import Home from "@/layouts/Home/Index.vue";

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="sidebar h-screen p-6 w-80 fixed inset-y-0 transition-all"
+    class="sidebar h-screen p-6 w-80 fixed z-10 inset-y-0 transition-all"
     :class="[isMenuOpen ? 'left-0' : '-left-80']"
   >
     <div class="h-full bg-primary rounded-2xl shadow text-white relative">
