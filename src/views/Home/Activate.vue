@@ -179,19 +179,25 @@ export default {
       }
     },
     async obtenerAsistencias(codigoEstudiante) {
-      const {
-        data: {
-          data: { numAttendance, numExcuses, numFouls },
-        },
-      } = await client.get(`/students/personal-report/${codigoEstudiante}/1`);
+      try {
+        const {
+          data: {
+            data: { numAttendance, numExcuses, numFouls },
+          },
+        } = await client.get(`/students/personal-report/${codigoEstudiante}/1`);
 
-      this.alumno.asistencias = numAttendance;
-      this.alumno.faltas = numFouls;
-      this.isCodeSearched = true;
-      this.isCodeSearching = false;
+        this.alumno.asistencias = numAttendance;
+        this.alumno.faltas = numFouls;
+        this.isCodeSearched = true;
+        this.isCodeSearching = false;
+      } catch (error) {
+        this.deleteSearch()
+        this.$toast.error("No se encontró el código ingresado");
+      }
     },
     deleteSearch() {
       this.alumno.codigo = "";
+      this.isCodeSearching = false;
       this.isCodeSearched = false;
     },
     updateLeftTime(date1) {
