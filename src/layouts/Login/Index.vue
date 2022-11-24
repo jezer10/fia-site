@@ -12,6 +12,7 @@ export default {
           },
         } = await client.post("/auth/sign-in", this.user);
         localStorage.setItem("token", token);
+        this.$toast.error("Credenciales Incorrectas");
         this.$router.push({ name: "Home" });
       } catch (error) {
         this.$toast.error("Credenciales Incorrectas");
