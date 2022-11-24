@@ -32,7 +32,7 @@
 
     <div class="flex gap-4" v-if="form.ciclo && form.semestre">
       <div class="w-full">
-        <Combobox v-model="selected">
+        <Combobox v-model="studentForm.student">
           <div class="relative mt-1">
             <div class="relative">
               <ComboboxInput
@@ -108,21 +108,7 @@
           </div>
         </Combobox>
       </div>
-      <!-- <div class="w-full">
-        <input
-          type="text"
-          placeholder="Codigo"
-          v-model="form.name"
-          class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full"
-          @keyup="keyUp($event)"
-          list="students"
-        />
-        <datalist id="students" style="width: 50%">
-          <option v-for="c in alumnos">
-            {{ c.codigo }} - {{ c.nombre }} {{ c.apellido }}
-          </option>
-        </datalist>
-      </div> -->
+
       <button
         class="bg-primary text-white rounded-lg w-12 flex-none flex justify-center items-center shadow whitespace-nowrap"
         @click="openModal"
@@ -137,8 +123,15 @@
         <pencil-icon class="w-4 h-4" />
       </button>
     </div>
-    <HelloWorld/>
-    <datepicker v-model="date" class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full" timepicker/>
+    <datepicker
+      v-model="studentForm.fecha"
+      class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full"
+      :enableTimePicker="false"
+      :weekStart="0"
+      inputClassName="form-control"
+      :disabledWeekDays="[0, 1, 2, 3, 4, 6]"
+      locale="es"
+    />
     <div class="flex items-center text-xs gap-4 text-gray-600">
       <Switch
         v-model="studentForm.asistencia"
@@ -164,7 +157,7 @@
       </button>
       <button
         class="bg-secondary text-white rounded-lg px-4 py-2 w-full shadow whitespace-nowrap"
-        @click="asistencia"
+        @click="registerAttendance"
       >
         Registrar
       </button>
@@ -194,8 +187,7 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import ModalAlumno from "./ModalAlumno.vue";
-import HelloWorld from "./HelloWorld.vue";
-
+import moment from "moment";
 export default {
   components: {
     FullCalendar,
@@ -211,24 +203,20 @@ export default {
     ComboboxOption,
     TransitionRoot,
     ModalAlumno,
-    HelloWorld
-},
+  },
   emits: ["closeRegister"],
   data: () => ({
     calendarOptions: {
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: "dayGridMonth",
     },
-    date: "",
     isCreateAlumnoOpen: false,
     semestres: [],
     ciclos: [],
     alumnos: [],
-    selected: {},
-    people: [],
     query: "",
     studentForm: {
-      name: "",
+      student: {},
       fecha: "",
       asistencia: false,
     },
@@ -246,6 +234,19 @@ export default {
   methods: {
     openModal() {
       this.isCreateAlumnoOpen = true;
+    },
+
+    async registerAttendance() {
+      const { asistencia, fecha, student } = this.studentForm;
+      const formattedDate = moment(fecha).format("DD/MM/YYYY");
+      const body = {
+        attended: asistencia ? 1 : 0,
+        date: formattedDate,
+        idStudent: student.id,
+      };
+      console.log(body);
+      const response = await client.post("/students/register-attendance", body);
+      console.log(response);
     },
     async getSemesters() {
       const {
