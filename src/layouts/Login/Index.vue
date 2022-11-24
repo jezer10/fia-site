@@ -1,7 +1,30 @@
 <script>
 import { UserIcon, LockClosedIcon } from "@heroicons/vue/24/solid";
+import { client } from "@/api/client";
 export default {
   components: { UserIcon, LockClosedIcon },
+  methods: {
+    async authUser() {
+      try {
+        const {
+          data: {
+            data: { token },
+          },
+        } = await client.post("/auth/sign-in", this.user);
+        localStorage.setItem("token", token);
+        this.$router.push({ name: "Home" });
+      } catch (error) {
+        this.$toast.error("Credenciales Incorrectas");
+        console.log(error);
+      }
+    },
+  },
+  data: () => ({
+    user: {
+      email: "",
+      passw: "",
+    },
+  }),
 };
 </script>
 <template>
@@ -68,18 +91,25 @@ export default {
                 <hr class="w-full" />
               </div>
               <div class="relative flex items-center">
-                <input type="text" class="form-control" placeholder="Usuario" />
+                <input
+                  v-model="user.email"
+                  type="text"
+                  class="form-control"
+                  placeholder="Usuario"
+                />
                 <UserIcon class="w-4 h-4 absolute right-4 text-white" />
               </div>
               <div class="relative flex items-center">
                 <input
-                  type="text"
+                  v-model="user.passw"
+                  type="password"
                   class="form-control"
                   placeholder="Contraseña"
                 />
                 <LockClosedIcon class="w-4 h-4 absolute right-4 text-white" />
               </div>
               <button
+                @click="authUser()"
                 class="bg-primary-light px-4 py-2 rounded-lg class text-white hover:bg-black"
               >
                 Ingresar
