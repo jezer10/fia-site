@@ -137,9 +137,8 @@
         <pencil-icon class="w-4 h-4" />
       </button>
     </div>
-
-    <full-calendar :options="calendarOptions" />
-    <datepicker class="w-full" />
+    <HelloWorld/>
+    <datepicker v-model="date" class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full" timepicker/>
     <div class="flex items-center text-xs gap-4 text-gray-600">
       <Switch
         v-model="studentForm.asistencia"
@@ -195,6 +194,7 @@ import {
   TransitionRoot,
 } from "@headlessui/vue";
 import ModalAlumno from "./ModalAlumno.vue";
+import HelloWorld from "./HelloWorld.vue";
 
 export default {
   components: {
@@ -211,13 +211,15 @@ export default {
     ComboboxOption,
     TransitionRoot,
     ModalAlumno,
-  },
+    HelloWorld
+},
   emits: ["closeRegister"],
   data: () => ({
     calendarOptions: {
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: "dayGridMonth",
     },
+    date: "",
     isCreateAlumnoOpen: false,
     semestres: [],
     ciclos: [],

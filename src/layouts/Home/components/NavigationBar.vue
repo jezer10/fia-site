@@ -34,12 +34,15 @@ export default {
       },
     ],
   }),
-  async mounted() {
-    const {
-      data: { data },
-    } = await client.get("axes/get-all");
-    this.routes = data;
+  methods: {
+    async getRoutes() {
+      const {
+        data: { data },
+      } = await client.get("axes/get-all");
+      this.routes = data;
+    },
   },
+  async mounted() {},
 };
 </script>
 

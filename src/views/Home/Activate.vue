@@ -85,11 +85,11 @@
           <div class="rounded-lg bg-gray-200 shadow p-4">
             <div class="flex flex-col">
               <span class="font-bold text-2xl">Retos</span>
-              <span class="font-light text-xs"
-                >Retos de la semana</span
-              >
+              <span class="font-light text-xs">Retos de la semana</span>
             </div>
-            <button class="focus:outline-none text-secondary font-bold">Sin Retos</button>
+            <button class="focus:outline-none text-secondary font-bold">
+              Sin Retos
+            </button>
           </div>
           <div
             class="rounded-lg bg-gray-200 shadow p-2 relative flex flex-col gap-2"
@@ -107,19 +107,21 @@
             </div>
             <div>
               <input
-                type="text"
+                :disabled="isCodeSearching"
+                @input="search($event.target.value)"
+                type="number"
                 placeholder="Ingresa tu código universitario"
                 class="w-full py-2 px-4 rounded-lg shadow focus:outline-none"
               />
             </div>
-            <div class="grid grid-cols-2 text-lg">
+            <div class="grid grid-cols-2 text-lg" v-if="isCodeSearched">
               <div class="flex flex-col text-center">
                 <span class="font-medium"> Asistencias </span>
-                <span class="font-bold"> 69 </span>
+                <span class="font-bold"> {{ alumno.asistencias }} </span>
               </div>
               <div class="flex flex-col text-center text-red-600">
                 <span class="font-medium"> Faltas </span>
-                <span class="font-bold"> 96 </span>
+                <span class="font-bold"> {{ alumno.faltas }} </span>
               </div>
             </div>
           </div>
@@ -131,17 +133,24 @@
 
 <script>
 import moment from "moment";
+import { client } from "@/api/client";
 import { InformationCircleIcon } from "@heroicons/vue/24/solid";
 export default {
   components: {
     InformationCircleIcon,
   },
   data: () => ({
+    isCodeSearching: false,
+    isCodeSearched: false,
     timeLeft: {
       days: 0,
       hours: 0,
       minutes: 0,
       seconds: 0,
+    },
+    alumno: {
+      asistencias: 0,
+      faltas: 0,
     },
   }),
   mounted() {
@@ -157,6 +166,23 @@ export default {
     setInterval(() => {}, 1000);
   },
   methods: {
+    async search(valorinput) {
+      if (valorinput.length == 9) {
+        this.isCodeSearching = true;
+        await this.obtenerAsistencias(valorinput);
+      }
+    },
+    async obtenerAsistencias(codigoEstudiante) {
+      const {
+        data: {
+          data: { numAttendance, numExcuses, numFouls },
+        },
+      } = await client.get(`/students/personal-report/${codigoEstudiante}/1`);
+
+      this.alumno.asistencias = numAttendance;
+      this.alumno.faltas = numFouls;
+      this.isCodeSearched = true;
+    },
     updateLeftTime(date1) {
       const date2 = moment();
       let d = date1.diff(date2, "seconds");
@@ -170,3 +196,5 @@ export default {
   },
 };
 </script>
+
+<style></style>
