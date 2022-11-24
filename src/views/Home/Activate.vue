@@ -105,14 +105,18 @@
                 >Consulta tus asistencias y faltas</span
               >
             </div>
-            <div>
+            <div class="relative flex items-center">
               <input
                 :disabled="isCodeSearching"
+                v-model="alumno.codigo"
                 @input="search($event.target.value)"
                 type="number"
                 placeholder="Ingresa tu código universitario"
-                class="w-full py-2 px-4 rounded-lg shadow focus:outline-none"
+                class="w-full py-2 px-4 pr-8 rounded-lg shadow focus:outline-none"
               />
+              <button @click="deleteSearch()" class="absolute right-2">
+                <XMarkIcon class="w-4 h-4" />
+              </button>
             </div>
             <div class="grid grid-cols-2 text-lg" v-if="isCodeSearched">
               <div class="flex flex-col text-center">
@@ -134,10 +138,11 @@
 <script>
 import moment from "moment";
 import { client } from "@/api/client";
-import { InformationCircleIcon } from "@heroicons/vue/24/solid";
+import { InformationCircleIcon, XMarkIcon } from "@heroicons/vue/24/solid";
 export default {
   components: {
     InformationCircleIcon,
+    XMarkIcon,
   },
   data: () => ({
     isCodeSearching: false,
@@ -151,6 +156,7 @@ export default {
     alumno: {
       asistencias: 0,
       faltas: 0,
+      codigo: "",
     },
   }),
   mounted() {
@@ -182,6 +188,11 @@ export default {
       this.alumno.asistencias = numAttendance;
       this.alumno.faltas = numFouls;
       this.isCodeSearched = true;
+      this.isCodeSearching = false;
+    },
+    deleteSearch() {
+      this.alumno.codigo = "";
+      this.isCodeSearched = false;
     },
     updateLeftTime(date1) {
       const date2 = moment();
