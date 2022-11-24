@@ -114,7 +114,7 @@
                 placeholder="Ingresa tu código universitario"
                 class="w-full py-2 px-4 pr-8 rounded-lg shadow focus:outline-none"
               />
-              <button @click="deleteSearch()" v-if="alumno.codigo.length>0" class="absolute right-2">
+              <button @click="deleteSearch()" v-if="false" class="absolute right-2">
                 <XMarkIcon class="w-4 h-4" />
               </button>
             </div>
