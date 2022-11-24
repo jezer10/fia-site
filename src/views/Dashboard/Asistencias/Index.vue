@@ -16,6 +16,7 @@
 <script>
 import ListaAsistencias from "./components/ListaAsistencias.vue";
 import RegistrarAsistencia from "./components/RegistrarAsistencia.vue";
+// import { client } from '@/api/client';
 
 export default {
   components: {
@@ -25,7 +26,9 @@ export default {
   data: () => ({
     isRegisterOpen: false,
   }),
-  methods: {},
+  methods: {
+    
+  }
 };
 </script>
 
