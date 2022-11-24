@@ -32,6 +32,83 @@
 
     <div class="flex gap-4" v-if="form.ciclo && form.semestre">
       <div class="w-full">
+        <Combobox v-model="selected">
+          <div class="relative mt-1">
+            <div class="relative">
+              <ComboboxInput
+                class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full"
+                :displayValue="(person) => person.names"
+                @change="query = $event.target.value"
+              />
+              <ComboboxButton
+                class="absolute inset-y-0 right-0 flex items-center pr-2"
+              >
+                <ChevronUpDownIcon
+                  class="h-5 w-5 text-gray-400"
+                  aria-hidden="true"
+                />
+              </ComboboxButton>
+            </div>
+            <TransitionRoot
+              leave="transition ease-in duration-100"
+              leaveFrom="opacity-100"
+              leaveTo="opacity-0"
+              @after-leave="query = ''"
+            >
+              <ComboboxOptions
+                class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+              >
+                <div
+                  v-if="filteredPeople.length === 0 && query !== ''"
+                  class="relative cursor-default select-none py-2 px-4 text-gray-700"
+                >
+                  No Hay Alumnos Registrados
+                </div>
+
+                <ComboboxOption
+                  v-for="person in filteredPeople"
+                  as="template"
+                  :key="person.id"
+                  :value="person"
+                  v-slot="{ selected, active }"
+                >
+                  <li
+                    class="relative cursor-default select-none py-2 pl-10 pr-4"
+                    :class="{
+                      'bg-teal-600 text-white': active,
+                      'text-gray-900': !active,
+                    }"
+                  >
+                    <span
+                      class="block truncate"
+                      :class="{
+                        'font-medium': selected,
+                        'font-normal': !selected,
+                      }"
+                    >
+                      <span>{{ person.names }} </span>
+                      <span class="font-bold text-xs ml-2">
+                        {{ person.code }}
+                      </span>
+                    </span>
+                    <span
+                      v-if="selected"
+                      class="absolute inset-y-0 left-0 flex items-center pl-3"
+                      :class="{
+                        'text-white': active,
+                        'text-teal-600': !active,
+                      }"
+                    >
+                      <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                    </span>
+                  </li>
+                </ComboboxOption>
+              </ComboboxOptions>
+            </TransitionRoot>
+          </div>
+        </Combobox>
+      </div>
+      <!-- <div class="w-full">
         <input
           type="text"
           placeholder="Codigo"
@@ -45,7 +122,7 @@
             {{ c.codigo }} - {{ c.nombre }} {{ c.apellido }}
           </option>
         </datalist>
-      </div>
+      </div> -->
       <button
         class="bg-primary text-white rounded-lg w-12 flex-none flex justify-center items-center shadow whitespace-nowrap"
         @click="openModal"
@@ -61,20 +138,8 @@
       </button>
     </div>
 
-    <input
-      type="text"
-      v-model="studentForm.name"
-      placeholder="Nombre Alumno"
-      class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full"
-      disabled
-    />
-
-    <input
-      type="date"
-      v-model="studentForm.fecha"
-      class="bg-gray-100 rounded-lg focus:outline-none px-2 py-2 w-full"
-    />
-
+    <full-calendar :options="calendarOptions" />
+    <datepicker class="w-full" />
     <div class="flex items-center text-xs gap-4 text-gray-600">
       <Switch
         v-model="studentForm.asistencia"
@@ -109,19 +174,57 @@
 </template>
 
 <script>
+import "@fullcalendar/core/vdom";
+import FullCalendar from "@fullcalendar/vue3";
+import dayGridPlugin from "@fullcalendar/daygrid";
+import interactionPlugin from "@fullcalendar/interaction";
 import { client } from "@/api/client";
-import { PlusIcon, PencilIcon } from "@heroicons/vue/24/solid";
-import { Switch } from "@headlessui/vue";
+import {
+  PlusIcon,
+  PencilIcon,
+  CheckIcon,
+  ChevronUpDownIcon,
+} from "@heroicons/vue/24/solid";
+import {
+  Switch,
+  Combobox,
+  ComboboxInput,
+  ComboboxButton,
+  ComboboxOptions,
+  ComboboxOption,
+  TransitionRoot,
+} from "@headlessui/vue";
 import ModalAlumno from "./ModalAlumno.vue";
 
 export default {
-  components: { PlusIcon, PencilIcon, Switch, ModalAlumno },
+  components: {
+    FullCalendar,
+    PlusIcon,
+    PencilIcon,
+    CheckIcon,
+    ChevronUpDownIcon,
+    Switch,
+    Combobox,
+    ComboboxInput,
+    ComboboxButton,
+    ComboboxOptions,
+    ComboboxOption,
+    TransitionRoot,
+    ModalAlumno,
+  },
   emits: ["closeRegister"],
   data: () => ({
+    calendarOptions: {
+      plugins: [dayGridPlugin, interactionPlugin],
+      initialView: "dayGridMonth",
+    },
     isCreateAlumnoOpen: false,
     semestres: [],
     ciclos: [],
     alumnos: [],
+    selected: {},
+    people: [],
+    query: "",
     studentForm: {
       name: "",
       fecha: "",
@@ -139,6 +242,9 @@ export default {
     this.getSemesters();
   },
   methods: {
+    openModal() {
+      this.isCreateAlumnoOpen = true;
+    },
     async getSemesters() {
       const {
         data: { data },
@@ -172,23 +278,38 @@ export default {
     },
     async getStudentsByCycle(id) {
       this.alumnos = [];
-
       try {
         const response = await client.get(
           `https://server-sites.herokuapp.com/api/students/get-by-cycle/${id}`
         );
-        console.log("Respuesta", response);
-      } catch ({ response: { status } }) {
-        console.log("Error", status);
+        const {
+          data: { data },
+        } = response;
 
+        this.alumnos = data;
+      } catch ({ response: { status } }) {
         if (status == 404) {
+          this.$toast.error(
+            `No hay alumnos existentes, Intente Registar Alguno`
+          );
           this.isCreateAlumnoOpen = true;
-          console.log(this.form);
         }
       }
     },
     closeRegister() {
       this.$emit("closeRegister");
+    },
+  },
+  computed: {
+    filteredPeople() {
+      return this.query === ""
+        ? this.alumnos
+        : this.alumnos.filter((alumno) =>
+            alumno.names
+              .toLowerCase()
+              .replace(/\s+/g, "")
+              .includes(this.query.toLowerCase().replace(/\s+/g, ""))
+          );
     },
   },
 };

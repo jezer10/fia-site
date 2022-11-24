@@ -127,9 +127,15 @@ export default {
         ...this.student,
         idCycle: this.cycle,
       };
-      console.log(body);
-      const response = await client.post("/students/create", body);
-      console.log(response);
+      const { data, status } = await client.post("/students/create", body);
+      console.log(data);
+      if (status !== 201) {
+        this.$toast.error("Ocurrio un error durante el registro");
+        this.closeModal();
+      }
+
+      this.$toast.success("Estudiante creado correctamente");
+      this.closeModal();
     },
   },
 };
