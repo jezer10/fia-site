@@ -132,7 +132,97 @@
       :disabledWeekDays="[0, 1, 2, 3, 4, 6]"
       locale="es"
     />
-    <div class="flex items-center text-xs gap-4 text-gray-600">
+    <div class="relative">
+      <button
+        @click="isSelectOpen = !isSelectOpen"
+        class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full relative flex items-center"
+      >
+        <span class="text-gray-600"> Participación </span>
+        <ChevronDownIcon class="w-4 h-4 absolute right-2" />
+      </button>
+      <div
+        class="w-full rounded bg-white shadow p-4 mt-2 absolute"
+        v-if="isSelectOpen"
+      >
+        <div
+          class="px-4 py-1 flex items-center gap-4 rounded text-gray-600 hover:bg-gray-400 hover:text-white cursor-pointer"
+        >
+          <CheckIcon class="w-4 h-4" />
+          <span> Asistió </span>
+        </div>
+        <div
+          class="px-4 py-1 flex items-center gap-4 rounded text-gray-600 hover:bg-gray-400 hover:text-white cursor-pointer"
+        >
+          <XMarkIcon class="w-4 h-4" />
+          <span> Faltó </span>
+        </div>
+        <div
+          class="px-4 py-1 flex items-center gap-4 rounded text-gray-600 hover:bg-gray-400 hover:text-white cursor-pointer"
+        >
+          <EllipsisHorizontalCircleIcon class="w-4 h-4" />
+          <span> Asistió </span>
+        </div>
+      </div>
+    </div>
+    <div >
+      <Listbox v-model="selectedPerson">
+        <div class="relative mt-1">
+          <ListboxButton
+            class="relative w-full cursor-default rounded-lg bg-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-orange-300 sm:text-sm"
+          >
+            <span class="block truncate">{{ selectedPerson.name }}</span>
+            <span
+              class="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2"
+            >
+              <ChevronUpDownIcon
+                class="h-5 w-5 text-gray-400"
+                aria-hidden="true"
+              />
+            </span>
+          </ListboxButton>
+
+          <transition
+            leave-active-class="transition duration-100 ease-in"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+          >
+            <ListboxOptions
+              class="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+            >
+              <ListboxOption
+                v-slot="{ active, selected }"
+                v-for="person in people"
+                :key="person.name"
+                :value="person"
+                as="template"
+              >
+                <li
+                  :class="[
+                    active ? 'bg-amber-100 text-amber-900' : 'text-gray-900',
+                    'relative cursor-default select-none py-2 pl-10 pr-4',
+                  ]"
+                >
+                  <span
+                    :class="[
+                      selected ? 'font-medium' : 'font-normal',
+                      'block truncate',
+                    ]"
+                    >{{ person.name }}</span
+                  >
+                  <span
+                    v-if="selected"
+                    class="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600"
+                  >
+                    <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                  </span>
+                </li>
+              </ListboxOption>
+            </ListboxOptions>
+          </transition>
+        </div>
+      </Listbox>
+    </div>
+    <!-- <div class="flex items-center text-xs gap-4 text-gray-600">
       <Switch
         v-model="studentForm.asistencia"
         :class="studentForm.asistencia ? 'bg-primary' : 'bg-gray-100'"
@@ -146,7 +236,7 @@
         />
       </Switch>
       <span>¿Asistio?</span>
-    </div>
+    </div> -->
 
     <div class="grid grid-cols-2">
       <button
@@ -176,7 +266,10 @@ import {
   PencilIcon,
   CheckIcon,
   ChevronUpDownIcon,
+  ChevronDownIcon,
+  XMarkIcon,
 } from "@heroicons/vue/24/solid";
+import { EllipsisHorizontalCircleIcon } from "@heroicons/vue/24/outline";
 import {
   Switch,
   Combobox,
@@ -185,6 +278,11 @@ import {
   ComboboxOptions,
   ComboboxOption,
   TransitionRoot,
+  Listbox,
+  ListboxLabel,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
 } from "@headlessui/vue";
 import ModalAlumno from "./ModalAlumno.vue";
 import moment from "moment";
@@ -195,6 +293,9 @@ export default {
     PencilIcon,
     CheckIcon,
     ChevronUpDownIcon,
+    ChevronDownIcon,
+    XMarkIcon,
+    EllipsisHorizontalCircleIcon,
     Switch,
     Combobox,
     ComboboxInput,
@@ -203,6 +304,11 @@ export default {
     ComboboxOption,
     TransitionRoot,
     ModalAlumno,
+    Listbox,
+    ListboxLabel,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
   },
   emits: ["closeRegister"],
   data: () => ({
@@ -210,10 +316,20 @@ export default {
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: "dayGridMonth",
     },
+    isSelectOpen: false,
     isCreateAlumnoOpen: false,
     semestres: [],
     ciclos: [],
     alumnos: [],
+    selectedPerson: {},
+    people: [
+      { name: "Wade Cooper" },
+      { name: "Arlene Mccoy" },
+      { name: "Devon Webb" },
+      { name: "Tom Cook" },
+      { name: "Tanya Fox" },
+      { name: "Hellen Schmidt" },
+    ],
     query: "",
     studentForm: {
       student: {},
@@ -229,6 +345,7 @@ export default {
     },
   }),
   mounted() {
+    this.selectedPerson = this.people[0];
     this.getSemesters();
   },
   methods: {
