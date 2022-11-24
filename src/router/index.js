@@ -15,6 +15,7 @@ import Landing from "@/views/Home/Landing.vue";
 import VinculacionMedio from "@/views/Home/VinculacionMedio.vue";
 import Activate from "@/views/Home/Activate.vue";
 import Practicas from "@/views/Home/Practicas.vue";
+import PPPContend from "@/views/Home/practica_profesionales.vue";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -39,6 +40,10 @@ const router = createRouter({
           path: "practicas",
           component: Practicas,
         },
+        {
+          path: "pre-professional-practices",
+          component: PPPContend
+        }
       ],
     },
     {
