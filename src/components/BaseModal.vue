@@ -57,7 +57,7 @@
                 <div class="flex justify-end gap-2 p-4">
                   <button
                     @click="closeModal"
-                    class="text-gray-600 text-sm shadow px-6 py-2 rounded-lg font-medium"
+                    class="text-gray-600 text-sm  px-6 py-2 rounded-lg font-medium"
                   >
                     Cancelar
                   </button>
