@@ -4,7 +4,12 @@ import {
   PlusIcon,
   TableCellsIcon,
 } from "@heroicons/vue/24/solid";
+
 import { client } from "@/api/client";
+
+import exportXlsFile from "export-from-json";
+
+// import VueExcelXlsx from "vue-excel-xlsx";
 
 export default {
   data: () => ({
@@ -16,7 +21,7 @@ export default {
     attendancesAll: []
   }),
 
-  mounted () {
+  mounted() {
     this.getListAllSemestre();
   },
 
@@ -48,18 +53,29 @@ export default {
       this.cycles = data;
     },
 
-    async getReportStudent (idCycle) {
-      
+    async getReportStudent(idCycle) {
+
       const response = await client.get(`/students/reports-by-cycle/${idCycle}`);
 
       const { data } = response.data;
-      
+
       const { attendances } = data[0];
 
       this.fechasActivate = attendances;
 
       this.studentReport = data;
 
+    },
+
+    async exportExcelStudentsAttendes () {
+      const data = this.studentReport;
+      const fileName = "Reporte Activate Sistemas"
+      const exportType = exportXlsFile.types.xls
+      exportXlsFile({
+        data,
+        fileName,
+        exportType,
+      })
     }
   },
   emits: ["openRegister"],
@@ -71,20 +87,31 @@ export default {
   <div class="flex justify-between items-center gap-4 w-full overflow-x-auto">
     <div class="flex gap-4 items-center">
       <div class="relative flex items-center">
-        <input type="text" class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 pr-10 text-sm" 
+        <input type="text" class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 pr-10 text-sm"
           placeholder="Buscar " />
-          <MagnifyingGlassIcon class="w-4 h-4 text-gray-600 absolute right-4" />
-        </div>
-      <select class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 text-sm" @change="getListAllCycles($event.target.value)">
+        <MagnifyingGlassIcon class="w-4 h-4 text-gray-600 absolute right-4" />
+      </div>
+      <select class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 text-sm"
+        @change="getListAllCycles($event.target.value)">
         <option value="">Semestre</option>
         <option :value="x.id" v-for="x in semestreAll">{{ x.semester }}</option>
       </select>
-      <select class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 text-sm" @change="getReportStudent($event.target.value)">
+      <select class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 text-sm"
+        @change="getReportStudent($event.target.value)">
         <option value="" class="bg-blue-50">Ciclo</option>
         <option :value="c.id" v-for="c in cycles">{{ c.cycle }}</option>
       </select>
-      <button class="text-white text-sm whitespace-nowrap rounded-lg px-4 bg-green-600 py-2 flex">
+      <button class="text-white text-sm whitespace-nowrap rounded-lg px-4 bg-green-600 py-2 flex"
+        @click="exportExcelStudentsAttendes()">
         Exportar Excel
+        <vue-excel-xlsx
+        :data = "data"
+        :columns = "columns"
+        :file-name="'filename'"
+        :file-type="'xlsx'"
+        :sheet-name="'sheetname'"
+        >
+        </vue-excel-xlsx>
         <TableCellsIcon class="w-4 ml-2" />
       </button>
     </div>
