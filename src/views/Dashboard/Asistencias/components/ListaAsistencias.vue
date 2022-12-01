@@ -18,7 +18,9 @@ export default {
     cycles: [],
     studentReport: [],
     fechasActivate: [],
-    attendancesAll: []
+    attendancesAll: [],
+    //new
+    arreglo: []
   }),
 
   mounted() {
@@ -65,14 +67,40 @@ export default {
 
       this.studentReport = data;
 
+      this.arreglo = data;
+
+      this.arreglo.forEach(element => {      
+        for (let i = 0; i < element.attendances.length; i++) {
+          let date = element.attendances[i].date;
+          switch (element.attendances[i].attended) {
+            case 1:
+            element[date] = "Asistió";
+              break;
+            case 2:
+            element[date] = "Falta";
+              break;
+            case 3:
+            element[date] = "Justificado";
+              break;
+            default:
+              break;
+          }
+        }
+        delete element["id"]
+        delete element["idCycle"]
+        delete element["attendances"]
+      });
+
+      console.log(this.arreglo)
+      console.log(this.studentReport)
     },
 
-    async exportExcelStudentsAttendes () {
-      const data = this.studentReport;
+    async exportExcelStudentsAttendes() {
+      const data = this.arreglo;
       const fileName = "Reporte Activate Sistemas"
       const exportType = exportXlsFile.types.xls
       exportXlsFile({
-        data,
+        data2,
         fileName,
         exportType,
       })
@@ -104,13 +132,8 @@ export default {
       <button class="text-white text-sm whitespace-nowrap rounded-lg px-4 bg-green-600 py-2 flex"
         @click="exportExcelStudentsAttendes()">
         Exportar Excel
-        <vue-excel-xlsx
-        :data = "data"
-        :columns = "columns"
-        :file-name="'filename'"
-        :file-type="'xlsx'"
-        :sheet-name="'sheetname'"
-        >
+        <vue-excel-xlsx :data="data" :columns="columns" :file-name="'filename'" :file-type="'xlsx'"
+          :sheet-name="'sheetname'">
         </vue-excel-xlsx>
         <TableCellsIcon class="w-4 ml-2" />
       </button>
