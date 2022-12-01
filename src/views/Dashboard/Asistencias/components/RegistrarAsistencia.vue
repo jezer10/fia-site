@@ -2,190 +2,193 @@
   <modal-alumno
     :cycle="form.ciclo"
     :show="isCreateAlumnoOpen"
-    @closed="isCreateAlumnoOpen = false"
+    @close="isCreateAlumnoOpen = false"
   />
-  <div class="w-full grid 2xl:grid-cols-3 gap-4">
-    <div class="grid grid-cols-2 gap-4">
-      <select
-        class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full text-sm"
-        v-model="form.semestre"
-        @change="semesterChange($event.target.value)"
+  <div class=" flex  justify-center">
+    <div class="w-1/2 grid grid-cols-2 2xl:grid-cols-3 gap-4">
+      <span class="text-center col-span-2 font-bold text-xl text-gray-400"
+        >Estudiante</span
       >
-        <option value="" hidden>Semestre</option>
-        <option v-for="d in semestres" :value="d.id">
-          {{ d.semester }}
-        </option>
-      </select>
+      <div class="col-span-2 grid grid-cols-3 gap-4">
+        <select
+          class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full text-sm"
+          v-model="form.semestre"
+          @change="semesterChange($event.target.value)"
+        >
+          <option value="" hidden>Semestre</option>
+          <option v-for="d in semestres" :value="d.id">
+            {{ d.semester }}
+          </option>
+        </select>
 
-      <select
-        class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full text-sm"
-        v-model="form.ciclo"
-        v-if="searchedSemester && ciclos.length > 0"
-        @change="cycleChange($event.target.value)"
-      >
-        <option value="" hidden>Ciclo</option>
-        <option v-for="c in ciclos" :value="c.id">
-          {{ c.cycle }}
-        </option>
-      </select>
-    </div>
-
-    <div class="flex gap-4" v-if="form.ciclo && form.semestre">
-      <div class="w-full">
-        <Combobox v-model="studentForm.student">
-          <div class="relative mt-1">
-            <div class="relative">
-              <ComboboxInput
-                class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full"
-                :displayValue="(person) => person.names"
-                @change="query = $event.target.value"
-              />
-              <ComboboxButton
-                class="absolute inset-y-0 right-0 flex items-center pr-2"
-              >
-                <ChevronUpDownIcon
-                  class="h-5 w-5 text-gray-400"
-                  aria-hidden="true"
+        <select
+          class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full text-sm"
+          v-model="form.ciclo"
+          v-if="searchedSemester && ciclos.length > 0"
+          @change="cycleChange($event.target.value)"
+        >
+          <option value="" hidden>Ciclo</option>
+          <option v-for="c in ciclos" :value="c.id">
+            {{ c.cycle }}
+          </option>
+        </select>
+      </div>
+      <div class="flex gap-4 col-span-2" v-if="form.ciclo && form.semestre">
+        <div class="w-full">
+          <Combobox v-model="studentForm.student">
+            <div class="relative mt-1">
+              <div class="relative">
+                <ComboboxInput
+                  class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full"
+                  :displayValue="(person) => person.names"
+                  @change="query = $event.target.value"
                 />
-              </ComboboxButton>
-            </div>
-            <TransitionRoot
-              leave="transition ease-in duration-100"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-              @after-leave="query = ''"
-            >
-              <ComboboxOptions
-                class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
+                <ComboboxButton
+                  class="absolute inset-y-0 right-0 flex items-center pr-2"
+                >
+                  <ChevronUpDownIcon
+                    class="h-5 w-5 text-gray-400"
+                    aria-hidden="true"
+                  />
+                </ComboboxButton>
+              </div>
+              <TransitionRoot
+                leave="transition ease-in duration-100"
+                leaveFrom="opacity-100"
+                leaveTo="opacity-0"
+                @after-leave="query = ''"
               >
-                <div
-                  v-if="filteredPeople.length === 0 && query !== ''"
-                  class="relative cursor-default select-none py-2 px-4 text-gray-700"
+                <ComboboxOptions
+                  class="absolute z-10 mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm"
                 >
-                  No Hay Alumnos Registrados
-                </div>
-
-                <ComboboxOption
-                  v-for="person in filteredPeople"
-                  as="template"
-                  :key="person.id"
-                  :value="person"
-                  v-slot="{ selected, active }"
-                >
-                  <li
-                    class="relative cursor-default select-none py-2 pl-10 pr-4"
-                    :class="{
-                      'bg-teal-600 text-white': active,
-                      'text-gray-900': !active,
-                    }"
+                  <div
+                    v-if="filteredPeople.length === 0 && query !== ''"
+                    class="relative cursor-default select-none py-2 px-4 text-gray-700"
                   >
-                    <span
-                      class="block truncate"
+                    No Hay Alumnos Registrados
+                  </div>
+
+                  <ComboboxOption
+                    v-for="person in filteredPeople"
+                    as="template"
+                    :key="person.id"
+                    :value="person"
+                    v-slot="{ selected, active }"
+                  >
+                    <li
+                      class="relative cursor-default select-none py-2 pl-10 pr-4"
                       :class="{
-                        'font-medium': selected,
-                        'font-normal': !selected,
+                        'bg-teal-600 text-white': active,
+                        'text-gray-900': !active,
                       }"
                     >
-                      <span>{{ person.names }} </span>
-                      <span class="font-bold text-xs ml-2">
-                        {{ person.code }}
+                      <span
+                        class="block truncate"
+                        :class="{
+                          'font-medium': selected,
+                          'font-normal': !selected,
+                        }"
+                      >
+                        <span>{{ person.names }} </span>
+                        <span class="font-bold text-xs ml-2">
+                          {{ person.code }}
+                        </span>
                       </span>
-                    </span>
-                    <span
-                      v-if="selected"
-                      class="absolute inset-y-0 left-0 flex items-center pl-3"
-                      :class="{
-                        'text-white': active,
-                        'text-teal-600': !active,
-                      }"
-                    >
-                      <CheckIcon class="h-5 w-5" aria-hidden="true" />
-                    </span>
-                  </li>
-                </ComboboxOption>
-              </ComboboxOptions>
-            </TransitionRoot>
+                      <span
+                        v-if="selected"
+                        class="absolute inset-y-0 left-0 flex items-center pl-3"
+                        :class="{
+                          'text-white': active,
+                          'text-teal-600': !active,
+                        }"
+                      >
+                        <CheckIcon class="h-5 w-5" aria-hidden="true" />
+                      </span>
+                    </li>
+                  </ComboboxOption>
+                </ComboboxOptions>
+              </TransitionRoot>
+            </div>
+          </Combobox>
+        </div>
+
+        <button
+          class="bg-primary text-white rounded-lg w-12 flex-none flex justify-center items-center shadow whitespace-nowrap"
+          @click="openModal"
+        >
+          <plus-icon class="w-4 h-4" />
+        </button>
+        <button
+          class="bg-yellow-500 text-white rounded-lg w-12 flex-none flex justify-center items-center shadow whitespace-nowrap"
+          @click="openModal"
+          v-if="form.alumno"
+        >
+          <pencil-icon class="w-4 h-4" />
+        </button>
+      </div>
+      <span class="text-lg font-bold text-gray-400 col-span-2 text-center">Asistencia</span>
+      <datepicker
+        v-model="studentForm.fecha"
+        :enableTimePicker="false"
+        :weekStart="0"
+        :disabledWeekDays="[0, 1, 2, 3, 4, 6]"
+        locale="es"
+      />
+
+      <div>
+        <Listbox v-model="studentForm.asistencia">
+          <div class="relative">
+            <ListboxButton
+              class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full relative flex items-center"
+            >
+              <span class="text-gray-600">
+                {{ studentForm.asistencia.name ?? "Participación" }}
+              </span>
+              <ChevronDownIcon class="w-4 h-4 absolute right-2" />
+            </ListboxButton>
+
+            <transition
+              leave-active-class="transition duration-100 ease-in"
+              leave-from-class="opacity-100"
+              leave-to-class="opacity-0"
+            >
+              <ListboxOptions
+                class="w-full rounded bg-white shadow p-4 mt-2 absolute max-h-60 overflow-auto"
+              >
+                <ListboxOption
+                  v-for="p in participationOptions"
+                  class="px-4 py-1 flex items-center gap-4 rounded text-gray-600 hover:bg-gray-400 hover:text-white cursor-pointer"
+                  as="div"
+                  :key="p.id"
+                  :value="p"
+                >
+                  <div class="w-4 h-4">
+                    <CheckIcon v-if="p.id == 1" />
+                    <XMarkIcon v-if="p.id == 2" />
+                    <EllipsisHorizontalCircleIcon v-if="p.id == 3" />
+                  </div>
+                  <span> {{ p.name }} </span>
+                </ListboxOption>
+              </ListboxOptions>
+            </transition>
           </div>
-        </Combobox>
+        </Listbox>
       </div>
 
-      <button
-        class="bg-primary text-white rounded-lg w-12 flex-none flex justify-center items-center shadow whitespace-nowrap"
-        @click="openModal"
-      >
-        <plus-icon class="w-4 h-4" />
-      </button>
-      <button
-        class="bg-yellow-500 text-white rounded-lg w-12 flex-none flex justify-center items-center shadow whitespace-nowrap"
-        @click="openModal"
-        v-if="form.alumno"
-      >
-        <pencil-icon class="w-4 h-4" />
-      </button>
-    </div>
-    <datepicker
-      v-model="studentForm.fecha"
-      class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full"
-      :enableTimePicker="false"
-      :weekStart="0"
-      inputClassName="form-control"
-      :disabledWeekDays="[0, 1, 2, 3, 4, 6]"
-      locale="es"
-    />
-
-    <div>
-      <Listbox v-model="studentForm.asistencia">
-        <div class="relative">
-          <ListboxButton
-            class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full relative flex items-center"
-          >
-            <span class="text-gray-600">
-              {{ studentForm.asistencia.name ?? "Seleccionar" }}
-            </span>
-            <ChevronDownIcon class="w-4 h-4 absolute right-2" />
-          </ListboxButton>
-
-          <transition
-            leave-active-class="transition duration-100 ease-in"
-            leave-from-class="opacity-100"
-            leave-to-class="opacity-0"
-          >
-            <ListboxOptions
-              class="w-full rounded bg-white shadow p-4 mt-2 absolute max-h-60 overflow-auto"
-            >
-              <ListboxOption
-                v-for="p in participationOptions"
-                class="px-4 py-1 flex items-center gap-4 rounded text-gray-600 hover:bg-gray-400 hover:text-white cursor-pointer"
-                as="div"
-                :key="p.id"
-                :value="p"
-              >
-                <div class="w-4 h-4">
-                  <CheckIcon v-if="p.id==1"/>
-                  <XMarkIcon v-if="p.id==2"/>
-                  <EllipsisHorizontalCircleIcon v-if="p.id==3"/>
-                </div>
-                <span> {{ p.name }} </span>
-              </ListboxOption>
-            </ListboxOptions>
-          </transition>
-        </div>
-      </Listbox>
-    </div>
-
-    <div class="grid grid-cols-2">
-      <button
-        @click="closeRegister"
-        class="text-secondary w-full px-4 py-2 whitespace-nowrap"
-      >
-        Cancelar
-      </button>
-      <button
-        class="bg-secondary text-white rounded-lg px-4 py-2 w-full shadow whitespace-nowrap"
-        @click="registerAttendance"
-      >
-        Registrar
-      </button>
+      <div class="grid grid-cols-2 col-span-2">
+        <button
+          @click="closeRegister"
+          class="text-secondary w-full px-4 py-2 whitespace-nowrap"
+        >
+          Cancelar
+        </button>
+        <button
+          class="bg-secondary text-white rounded-lg px-4 py-2 w-full shadow whitespace-nowrap"
+          @click="registerAttendance"
+        >
+          Registrar
+        </button>
+      </div>
     </div>
   </div>
 </template>
@@ -287,13 +290,21 @@ export default {
       const { asistencia, fecha, student } = this.studentForm;
       const formattedDate = moment(fecha).format("DD/MM/YYYY");
       const body = {
-        attended: asistencia ? 1 : 0,
+        attended: asistencia.id,
         date: formattedDate,
         idStudent: student.id,
       };
-      console.log(body);
-      const response = await client.post("/students/register-attendance", body);
-      console.log(response);
+      try {
+        const response = await client.post(
+          "/students/register-attendance",
+          body
+        );
+        console.log(response);
+
+        this.$toast.success("Asistencia registrada");
+      } catch (error) {
+        this.$toast.error("Error al registrar asistencia");
+      }
     },
     async getSemesters() {
       const {

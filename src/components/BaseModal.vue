@@ -1,6 +1,6 @@
 <template>
   <TransitionRoot appear :show="show" as="template">
-    <Dialog as="div" @close="closeModal" class="relative z-10">
+    <Dialog as="div" @close="closedModal" class="relative z-10">
       <TransitionChild
         as="template"
         enter="duration-300 ease-out"
@@ -32,41 +32,12 @@
               <div
                 class="bg-primary text-white font-medium px-4 py-2 rounded-t-lg"
               >
-                <DialogTitle as="h3" class="text-lg">
-                  Payment successful
+                <DialogTitle as="h3" class="text-lg uppercase">
+                  {{ title }}
                 </DialogTitle>
               </div>
               <div class="bg-white rounded-b-lg">
-                <div class="grid gap-x-8 gap-y-4 grid-cols-2 px-4">
-                  <div v-for="i in 6">
-                    <label for="" class="form-label">Nombre</label>
-                    <input
-                      type="text"
-                      placeholder="Ingrese Nombre"
-                      class="bg-gray-100 rounded-lg focus:outline-none px-4 py-2 w-full"
-                    />
-                  </div>
-                  <div v-for="i in 3">
-                    <label for="" class="form-label">Nombre</label>
-                    <select class="w-full bg-white shadow px-4 py-2 rounded-lg">
-                      <option value="">Seleccionar Opcion</option>
-                    </select>
-                  </div>
-                </div>
-
-                <div class="flex justify-end gap-2 p-4">
-                  <button
-                    @click="closeModal"
-                    class="text-gray-600 text-sm  px-6 py-2 rounded-lg font-medium"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    class="bg-primary text-white text-sm shadow px-6 py-2 rounded-lg font-medium"
-                  >
-                    Guardar
-                  </button>
-                </div>
+                <slot />
               </div>
             </DialogPanel>
           </TransitionChild>
@@ -99,15 +70,20 @@ export default {
     TransitionRoot,
   },
   data: () => ({}),
+  emits: ["close"],
   props: {
     show: {
       type: Boolean,
       default: false,
     },
+    title: {
+      type: String,
+      required: true,
+    },
   },
   methods: {
-    closeModal() {
-      this.$emit("closed");
+    closedModal() {
+      this.$emit("close");
     },
   },
 };
