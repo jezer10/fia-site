@@ -1,16 +1,46 @@
 <script>
-import { Popover, PopoverButton, PopoverPanel } from "@headlessui/vue";
-import { ChevronDownIcon } from "@heroicons/vue/20/solid";
-import { client } from "../../../api/client";
-
+import {
+  Popover,
+  PopoverButton,
+  PopoverPanel,
+  ListboxButton,
+  ListboxOptions,
+  ListboxOption,
+  Listbox,
+} from "@headlessui/vue";
+import {
+  ChevronDownIcon,
+  ChevronUpDownIcon,
+  CheckIcon,
+} from "@heroicons/vue/20/solid";
+import { client } from "@/api/client";
+import { usePeriodStore } from "@/store/period";
 export default {
   components: {
     Popover,
     PopoverButton,
     PopoverPanel,
+    Listbox,
+    ListboxButton,
+    ListboxOptions,
+    ListboxOption,
     ChevronDownIcon,
+    ChevronUpDownIcon,
+    CheckIcon,
+  },
+  setup() {
+    const periodStore = usePeriodStore();
+
+    return {
+      periodStore,
+    };
   },
   data: () => ({
+    people: [],
+    form: {
+      selectedSemester: "",
+      selectedCycle: "",
+    },
     routes: [
       {
         name: "Gestión",
@@ -35,6 +65,14 @@ export default {
     ],
   }),
   methods: {
+    updateSemester(value) {
+      this.periodStore.setSemester(value);
+      const { id } = value;
+      this.periodStore.setCycles(id);
+    },
+    updateCycle(value) {
+      this.periodStore.setCycle(value);
+    },
     async getRoutes() {
       const {
         data: { data },
@@ -113,10 +151,118 @@ export default {
             </transition>
           </Popover>
         </div>
-        <div
-          class="text-white bg-primary rounded-lg px-4 py-1 text-xs font-medium"
-        >
-          Ciclo
+
+        <div class="w-20">
+          <Listbox
+            :model-value="periodStore.selectedSemester"
+            @update:model-value="updateSemester"
+          >
+            <div class="relative">
+              <ListboxButton
+                class="text-white bg-primary rounded px-2 py-1 text-xs font-medium w-full"
+              >
+                <span class="block truncate">{{
+                  periodStore.selectedSemester.semester ?? "Semestre"
+                }}</span>
+              </ListboxButton>
+
+              <transition
+                leave-active-class="transition duration-100 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+              >
+                <ListboxOptions
+                  class="absolute mt-1 max-h-60 w-full overflow-auto rounded bg-primary py-1 text-white text-base shadow-lg focus:outline-none sm:text-sm"
+                >
+                  <ListboxOption
+                    v-slot="{ active, selected }"
+                    v-for="p in periodStore.semesters"
+                    :key="p.semester"
+                    :value="p"
+                    as="template"
+                  >
+                    <li
+                      :class="[
+                        active ? 'bg-white text-primary' : 'text-white',
+                        'relative cursor-default select-none pl-2 text-xs font-extralight',
+                      ]"
+                    >
+                      <span
+                        :class="[
+                          selected ? 'font-medium' : 'font-normal',
+                          'block truncate',
+                        ]"
+                        >{{ p.semester }}</span
+                      >
+                      <span
+                        v-if="selected"
+                        class="absolute inset-y-0 right-2 flex items-center"
+                        :class="active ? 'text-primary' : 'text-white'"
+                      >
+                        <CheckIcon class="h-3 w-3" aria-hidden="true" />
+                      </span>
+                    </li>
+                  </ListboxOption>
+                </ListboxOptions>
+              </transition>
+            </div>
+          </Listbox>
+        </div>
+        <div class="w-12" v-if="(periodStore.selectedSemester.semester && periodStore.cycles.length >0 )">
+          <Listbox
+            :model-value="periodStore.selectedCycle"
+            @update:model-value="updateCycle"
+          >
+            <div class="relative">
+              <ListboxButton
+                class="text-white bg-primary rounded px-2 py-1 text-xs font-medium w-full"
+              >
+                <span class="block truncate">{{
+                  periodStore.selectedCycle.cycle ?? "Ciclo"
+                }}</span>
+              </ListboxButton>
+
+              <transition
+                leave-active-class="transition duration-100 ease-in"
+                leave-from-class="opacity-100"
+                leave-to-class="opacity-0"
+              >
+                <ListboxOptions
+                  class="absolute mt-1 max-h-60 w-full overflow-auto rounded bg-primary py-1 text-white text-base shadow-lg focus:outline-none sm:text-sm"
+                >
+                  <ListboxOption
+                    v-slot="{ active, selected }"
+                    v-for="p in periodStore.cycles"
+                    :key="p.cycle"
+                    :value="p"
+                    as="template"
+                  >
+                    <li
+                      :class="[
+                        active ? 'bg-white text-primary' : 'text-white',
+                        'relative cursor-default select-none pl-2 text-xs font-extralight',
+                      ]"
+                    >
+                      <span
+                        :class="[
+                          selected ? 'font-medium' : 'font-normal',
+                          'block truncate',
+                        ]"
+                        >{{ p.cycle }}</span
+                      >
+                      <span
+                        v-if="selected"
+                        class="absolute inset-y-0 right-2 flex items-center"
+                        :class="active ? 'text-primary' : 'text-white'"
+                      >
+                        <CheckIcon class="h-3 w-3" aria-hidden="true" />
+                      </span>
+                    </li>
+                  </ListboxOption>
+                </ListboxOptions>
+              </transition>
+            </div>
+          </Listbox>
         </div>
       </div>
     </div>

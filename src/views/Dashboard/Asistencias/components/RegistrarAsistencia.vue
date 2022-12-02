@@ -5,7 +5,7 @@
     @close="isCreateAlumnoOpen = false"
   />
   <div class=" flex  justify-center">
-    <div class="w-1/2 grid grid-cols-2 2xl:grid-cols-3 gap-4">
+    <div class="lg:w-1/2 grid grid-cols-2 2xl:grid-cols-3 gap-4">
       <span class="text-center col-span-2 font-bold text-xl text-gray-400"
         >Estudiante</span
       >
