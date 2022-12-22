@@ -4,7 +4,7 @@
     :show="isCreateAlumnoOpen"
     @close="isCreateAlumnoOpen = false"
   />
-  <div class=" flex  justify-center">
+  <div class="flex justify-center">
     <div class="lg:w-1/2 grid grid-cols-2 2xl:grid-cols-3 gap-4">
       <span class="text-center col-span-2 font-bold text-xl text-gray-400"
         >Estudiante</span
@@ -126,7 +126,9 @@
           <pencil-icon class="w-4 h-4" />
         </button>
       </div>
-      <span class="text-lg font-bold text-gray-400 col-span-2 text-center">Asistencia</span>
+      <span class="text-lg font-bold text-gray-400 col-span-2 text-center"
+        >Asistencia</span
+      >
       <datepicker
         v-model="studentForm.fecha"
         :enableTimePicker="false"
@@ -288,20 +290,22 @@ export default {
 
     async registerAttendance() {
       const { asistencia, fecha, student } = this.studentForm;
-      const formattedDate = moment(fecha).format("DD/MM/YYYY");
+      const formattedDate = moment(fecha).format("YYYY/MM/DD");
       const body = {
         attended: asistencia.id,
         date: formattedDate,
         idStudent: student.id,
       };
+      console.log(body);
+
       try {
         const response = await client.post(
           "/students/register-attendance",
           body
         );
-        console.log(response);
 
         this.$toast.success("Asistencia registrada");
+        this.closeRegister();
       } catch (error) {
         this.$toast.error("Error al registrar asistencia");
       }
@@ -340,9 +344,7 @@ export default {
     async getStudentsByCycle(id) {
       this.alumnos = [];
       try {
-        const response = await client.get(
-          `https://server-sites.herokuapp.com/api/students/get-by-cycle/${id}`
-        );
+        const response = await client.get(`/students/get-by-cycle/${id}`);
         const {
           data: { data },
         } = response;

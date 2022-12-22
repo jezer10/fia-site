@@ -1,5 +1,5 @@
 import axios from "axios";
-export const baseURL = "https://server-sites.herokuapp.com/api";
+export const baseURL = "https://server-sites-production.up.railway.app/api";
 export const client = axios.create({
   baseURL,
   headers: {

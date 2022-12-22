@@ -9,8 +9,6 @@ import { client } from "@/api/client";
 
 import exportXlsFile from "export-from-json";
 
-// import VueExcelXlsx from "vue-excel-xlsx";
-
 export default {
   data: () => ({
     table: [],
@@ -19,8 +17,7 @@ export default {
     studentReport: [],
     fechasActivate: [],
     attendancesAll: [],
-    //new
-    arreglo: []
+    arreglo: [],
   }),
 
   mounted() {
@@ -29,16 +26,25 @@ export default {
 
   methods: {
     async getAsistenciasActivate(code, cycle) {
-
-      const response = await client.get(`/students/personal-report/${code}/${cycle}`);
+      const response = await client.get(
+        `/students/personal-report/${code}/${cycle}`
+      );
 
       const { data } = response;
 
-      const { id, code: codeStudent, names, idCycle, numAttendance, numFouls, numExcuses, attendances } = data;
+      const {
+        id,
+        code: codeStudent,
+        names,
+        idCycle,
+        numAttendance,
+        numFouls,
+        numExcuses,
+        attendances,
+      } = data;
     },
 
     async getListAllSemestre() {
-
       const response = await client.get(`/academic/get-semesters`);
 
       const { data } = response.data;
@@ -47,7 +53,6 @@ export default {
     },
 
     async getListAllCycles(idSemestre) {
-
       const response = await client.get(`/academic/get-cycles/${idSemestre}`);
 
       const { data } = response.data;
@@ -56,55 +61,58 @@ export default {
     },
 
     async getReportStudent(idCycle) {
+      const {
+        data: { data },
+      } = await client.get(`/students/reports-by-cycle/${idCycle}`);
 
-      const response = await client.get(`/students/reports-by-cycle/${idCycle}`);
-
-      const { data } = response.data;
-
-      const { attendances } = data[0];
-
+      const attendances = [
+        ...new Set(
+          data
+            .reduce((a, b) => {
+              return [...a, ...b.attendances];
+            }, [])
+            .map((e) => e.date)
+        ),
+      ];
       this.fechasActivate = attendances;
 
       this.studentReport = data;
+      const parsedDate = data.map(
+        ({ id, idCycle, attendances, code, names }) => {
+          const parsedDates = attendances.reduce((a, { date, attended }) => {
+            const rto = {};
+            rto[date] =
+              attended == 1
+                ? "Asistió"
+                : attended == 2
+                ? "Falta"
+                : attended == 3
+                ? "Justificado"
+                : "";
+            return { ...a, ...rto };
+          }, {});
 
-      this.arreglo = data;
-
-      this.arreglo.forEach(element => {      
-        for (let i = 0; i < element.attendances.length; i++) {
-          let date = element.attendances[i].date;
-          switch (element.attendances[i].attended) {
-            case 1:
-            element[date] = "Asistió";
-              break;
-            case 2:
-            element[date] = "Falta";
-              break;
-            case 3:
-            element[date] = "Justificado";
-              break;
-            default:
-              break;
-          }
+          return {
+            "CODIGO ESTUDIANTE": code,
+            "NOMBRE ESTUDIANTE": names,
+            ...parsedDates,
+          };
         }
-        delete element["id"]
-        delete element["idCycle"]
-        delete element["attendances"]
-      });
+      );
 
-      console.log(this.arreglo)
-      console.log(this.studentReport)
+      this.arreglo = parsedDate;
     },
 
-    async exportExcelStudentsAttendes() {
+    async exportExcelStudentsAttendance() {
       const data = this.arreglo;
-      const fileName = "Reporte Activate Sistemas"
-      const exportType = exportXlsFile.types.xls
+      const fileName = "Reporte Activate Sistemas";
+      const exportType = exportXlsFile.types.xls;
       exportXlsFile({
-        data2,
+        data,
         fileName,
         exportType,
-      })
-    }
+      });
+    },
   },
   emits: ["openRegister"],
   components: { MagnifyingGlassIcon, PlusIcon, TableCellsIcon },
@@ -115,31 +123,41 @@ export default {
   <div class="flex justify-between items-center gap-4 w-full overflow-x-auto">
     <div class="flex gap-4 items-center">
       <div class="relative flex items-center">
-        <input type="text" class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 pr-10 text-sm"
-          placeholder="Buscar " />
+        <input
+          type="text"
+          class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 pr-10 text-sm"
+          placeholder="Buscar "
+        />
         <MagnifyingGlassIcon class="w-4 h-4 text-gray-600 absolute right-4" />
       </div>
-      <select class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 text-sm"
-        @change="getListAllCycles($event.target.value)">
+      <select
+        class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 text-sm"
+        @change="getListAllCycles($event.target.value)"
+      >
         <option value="">Semestre</option>
         <option :value="x.id" v-for="x in semestreAll">{{ x.semester }}</option>
       </select>
-      <select class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 text-sm"
-        @change="getReportStudent($event.target.value)">
+      <select
+        class="bg-gray-100 focus:outline-none rounded-lg px-4 py-2 text-sm"
+        @change="getReportStudent($event.target.value)"
+      >
         <option value="" class="bg-blue-50">Ciclo</option>
         <option :value="c.id" v-for="c in cycles">{{ c.cycle }}</option>
       </select>
-      <button class="text-white text-sm whitespace-nowrap rounded-lg px-4 bg-green-600 py-2 flex"
-        @click="exportExcelStudentsAttendes()">
-        Exportar Excel
-        <vue-excel-xlsx :data="data" :columns="columns" :file-name="'filename'" :file-type="'xlsx'"
-          :sheet-name="'sheetname'">
-        </vue-excel-xlsx>
-        <TableCellsIcon class="w-4 ml-2" />
+
+      <button
+        v-if="studentReport.length > 0"
+        class="flex gap-2 text-white text-sm whitespace-nowrap rounded-lg px-4 bg-green-600 py-2"
+        @click="exportExcelStudentsAttendance()"
+      >
+        <span> Exportar Excel </span>
+        <TableCellsIcon class="w-4" />
       </button>
     </div>
-    <button @click="$emit('openRegister')"
-      class="flex gap-2 rounded-lg text-sm bg-secondary px-4 py-2 text-white items-center">
+    <button
+      @click="$emit('openRegister')"
+      class="flex gap-2 rounded-lg text-sm bg-secondary px-4 py-2 text-white items-center"
+    >
       <PlusIcon class="w-4 h-4" /><span>Registrar</span>
     </button>
   </div>
@@ -149,7 +167,7 @@ export default {
         <tr>
           <th>Codigo</th>
           <th>Nombres y Apellido</th>
-          <th v-for="f in fechasActivate">{{ f.date }}</th>
+          <th v-for="f in fechasActivate">{{ f }}</th>
         </tr>
       </thead>
       <br />
@@ -158,9 +176,21 @@ export default {
           <td>{{ a.code }}</td>
           <td>{{ a.names }}</td>
           <td v-for="at in a.attendances">
-            <img v-if="at.attended == 1" class="w-5" src="../../../../assets/svg/asistio.svg" alt="">
-            <img v-if="at.attended == 2" class="w-5" src="../../../../assets/svg/falto.svg" alt="">
-            <img v-if="at.attended == 3" class="w-5" src="../../../../assets/svg/justificado.svg" alt="">
+            <img
+              v-if="at.attended == 1"
+              class="w-2 h-2"
+              src="@/assets/svg/asistio.svg"
+            />
+            <img
+              v-if="at.attended == 2"
+              class="w-2 h-2"
+              src="@/assets/svg/falto.svg"
+            />
+            <img
+              v-if="at.attended == 3"
+              class="w-2 h-2"
+              src="@/assets/svg/justificado.svg"
+            />
           </td>
           <!-- <td>{{ a.codigo == true ? "SI" : "NO" }}</td> -->
         </tr>
