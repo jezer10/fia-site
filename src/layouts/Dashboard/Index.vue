@@ -16,9 +16,9 @@ export default {
     <Sidebar :isMenuOpen="isMenuOpen" />
     <div
       class="contenido w-full h-full pt-24 transition-all"
-      :class="isMenuOpen ? 'md:pl-82' : ''"
+      :class="isMenuOpen ? 'pl-76' : ''"
     >
-      <div class="h-full w-full px-4 pt-4">
+      <div class="h-full w-full  p-4">
         <router-view></router-view>
       </div>
     </div>

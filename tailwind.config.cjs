@@ -14,6 +14,8 @@ module.exports = {
         88: "22rem",
         84: "21rem",
         76: "19rem",
+        74: "18.5rem",
+        72: "18rem",
       },
       fontFamily: {
         inter: ["'Inter'", ...defaultTheme.fontFamily.sans],

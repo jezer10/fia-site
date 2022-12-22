@@ -5,7 +5,7 @@ import Login from "@/layouts/Login/Index.vue";
 import Dashboard from "@/layouts/Dashboard/Index.vue";
 import Inicio from "@/views/Dashboard/Inicio.vue";
 import Usuarios from "@/views/Dashboard/Usuarios.vue";
-import Eventos from "@/views/Dashboard/Eventos.vue";
+import Eventos from "@/views/Dashboard/Eventos/Index.vue";
 import Publicaciones from "@/views/Dashboard/Publicaciones.vue";
 import Asistencias from "@/views/Dashboard/Asistencias/Index.vue";
 import Configuracion from "@/views/Dashboard/Configuracion.vue";
